@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>小可爱</title>
+	<style>
+       *{
+       	margin: 0;
+       	padding:0;
+       }
+       #box{
+       	width:500px;
+       	height:30px;
+       	background-color:gray;
+       	/*border-radius:5px;*/
+       	margin: 100px auto; 
+       	position: relative;
+       }
+       #overView{
+       	width:0px;
+       	height:30px;
+       	/*border-radius:5px;*/
+       	background-color:skyblue;
+        
+       }
+       #barView{
+		width:25px;
+       	height:50px;
+       	border-radius:5px;
+       	background-color:skyblue;
+        position: absolute;
+        top: -10px;
+       }
+</style>
+</head>
+<body>
+	<div id="box">
+      <div id="overView"></div>
+      <div id="barView"></div>
+      <span id="bai"></span>
+	</div>
+	
+	<script>
+       	function $(id){
+			return document.getElementById(id)
+		}
+		$("barView").onmousedown = function(){
+		document.onmousemove = function(evt){
+			// 兼容写法,获取事件对象
+			var evt = evt || window.event;
+			console.log(evt);
+
+			var bar_left = evt.clientX - $("box").offsetLeft;
+			if (bar_left < 0){
+				$("barView").style.left = "0px";
+			}else if (bar_left > $("box").offsetWidth - $("barView").offsetWidth){
+				$("barView").style.left = $("box").offsetWidth - $("barView").offsetWidth + "px";
+			}else{
+				//js逻辑优先执行,页面渲染在js结束后才执行
+				$("barView").style.left = bar_left + "px";
+			}
+			$("overView").style.width = $("barView").style.left;
+			$('bai').innerHTML =  parseInt($("overView").offsetWidth/($("box").offsetWidth-$("barView").offsetWidth) * 100) + "%";
+			window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+		}
+	}
+		document.onmouseup = function(){
+			document.onmousemove = null;
+		}
+	</script>
+</body>
+</html>
